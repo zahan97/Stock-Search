@@ -5,6 +5,13 @@ Also, there are numerous features like autocomplete, auto-refreshing live data, 
 
 Chekout the website on http://www.stocksearch.pw/
 
+## Snapshots
+<img src="images/home.PNG" width="1000" height="500" />
+<img src="images/details.PNG" width="1000" height="500" />
+<img src="images/details2.PNG" width="1000" height="500" />
+<img src="images/news.PNG" width="1000" height="500" />
+<img src="images/portfolio.PNG" width="1000" height="500" />
+
 ## Version
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.4.
