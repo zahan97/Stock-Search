@@ -1,0 +1,253 @@
+<div class="container">
+    <div *ngIf="spinner == true" style="margin-left: 47%; margin-top: 20px;">
+        <mat-spinner diameter="50"></mat-spinner>
+    </div>
+    <div *ngIf="spinner == false">
+    <div *ngIf="wrong == true; else restblock" class="alert alert-danger" role="alert" style="margin-top:30px; text-align: center;">
+        No results found. Please enter valid Ticker
+    </div>
+    <ng-template #restblock>
+        <ngb-alert *ngIf="show_walert == true" [type]="'success'" (close)="walert_close()" style="text-align: center; margin-bottom: 0; margin-top: 20px;">
+            {{ ticker }} added to Watchlist.
+        </ngb-alert>
+        <ngb-alert *ngIf="show_rwalert == true" [type]="'danger'" (close)="walert_close()" style="text-align: center; margin-bottom: 0; margin-top: 20px;">
+            {{ ticker }} removed from Watchlist.
+        </ngb-alert>
+
+        <ngb-alert *ngIf="show_palert == true" [type]="'success'" (close)="walert_close()" style="text-align: center; margin-bottom: 0; margin-top: 20px;">
+            {{ ticker }} bought successfully!
+        </ngb-alert>
+    <div class="row">
+        <div class="col"> 
+            <div style="display: flex;">
+                <h1 style="font-size: 45px; margin: 30px 0 0 0; overflow: hidden; line-height: 1">{{ ticker }}</h1>
+                <button *ngIf="star_fil == false" id="empty_star" (click)="star_click('empty')" style="outline: none; margin-top: 30px; text-decoration: none; border: none; background-color: white;">
+                    <svg width="25px" height="25px" viewBox="0 0 16 16" class="bi bi-star" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.523-3.356c.329-.314.158-.888-.283-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767l-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288l1.847-3.658 1.846 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.564.564 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                    </svg>
+                </button>
+                <button *ngIf="star_fil == true" id="filled_star" (click)="star_click('filled')" style="outline: none; margin-top: 30px; text-decoration: none; border: none; background-color: white;">
+                    <svg width="25px" height="25px" viewBox="0 0 16 16" class="bi bi-star-fill" fill="#fdd500" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                    </svg>
+                </button>
+            </div>
+            <h1 style="font-size: 23px; color: grey; margin: 5px 0 0 0">{{ compdesc?.name }}</h1>
+            <span style="margin: 5px 0 7px 0;">{{ compdesc?.exchangeCode }}</span><br>
+            <button (click)="open(content)" type="button" class="btn btn-success">Buy</button>
+            <ng-template #content let-modal>
+                <div class="modal-header" style="display: block;">
+                    <button style="outline: none;" type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+                    <h1 style="font-size: 15px; font-weight: 400;">{{ ticker }}</h1>
+                </div>
+                <div class="modal-body">
+                    Current Price: {{ putco(latsp[0].last.toFixed(2)) }}<br>
+                    <div class="form-group row">
+                        <div class="col-lg-1.5">
+                            <label class="col-form-label" style="margin-left: 15px">Quantity</label>
+                        </div>
+                        <div class="col-lg-6 col-sm-12">
+                            <input #num (keyup)="onKey(num.value, latsp[0].last)" type="number" min="0" class="form-control" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="mr-auto">Total: {{ values }}</div>
+                    <div><button (click)="buyit(num.value, latsp[0].last)" type="button" [disabled]="num.value === '0' || num.value === ''" class="btn btn-success">Buy</button></div>
+                </div>
+            </ng-template>
+        </div>
+        <div *ngIf="temp_c == 'green'; else elseblock" class="col" style="text-align: right;">
+            <h1 style="font-size: 45px; color: green; margin: 30px 0 0 0; line-height: 1;">{{ putco(latsp[0]?.last.toFixed(2)) }}</h1>
+            <h1 style="font-size: 23px; color: green; margin: 5px 0 0 0">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                </svg>
+                {{ (latsp[0]?.last - latsp[0]?.prevClose).toFixed(2) }} ({{ (((latsp[0]?.last - latsp[0]?.prevClose)*100)/latsp[0]?.prevClose).toFixed(2) }}%)
+            </h1>
+            <span style="margin: 5px 0 7px 0;">{{tsp.getFullYear() + '-' + (tsp.getMonth()+1) + '-' + tsp.getDate() + ' ' + tsp.getHours() + ':' + tsp.getMinutes() + ':' + sss}}</span><br>
+        </div>
+        <ng-template #elseblock>
+        <div class="col" style="text-align: right;">
+            <h1 style="font-size: 45px; color: red; margin: 30px 0 0 0;">{{ putco(latsp[0]?.last.toFixed(2)) }}</h1>
+            <h1 style="font-size: 23px; color: red; margin: 5px 0 0 0">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                </svg>
+                {{ (latsp[0]?.last - latsp[0]?.prevClose).toFixed(2) }} ({{ (((latsp[0]?.last - latsp[0]?.prevClose)*100)/latsp[0]?.prevClose).toFixed(2) }}%)
+            </h1>
+            <span style="margin: 5px 0 7px 0;">{{tsp.getFullYear() + '-' + (tsp.getMonth()+1) + '-' + tsp.getDate() + ' ' + tsp.getHours() + ':' + tsp.getMinutes() + ':' + sss}}</span><br>
+        </div>
+        </ng-template>
+    </div>
+    <div style="text-align: center; margin: 20px 0 20px 0;">
+        <span *ngIf="openco == false" style="background-color: #f5d7d9; color: red;">Market Closed on {{ latsp[0]?.timestamp.substring(0,10) }} 13:00:00</span>
+        <span *ngIf="openco == true" style="background-color: #b9fcb8; color: green;">Market is Open</span>
+    </div>
+
+    <mat-tab-group mat-stretch-tabs class="stretched-tabs">
+        <mat-tab label="Summary">
+            <ng-template matTabContent>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-6">
+                    <div class="row" style="padding-top: 40px; padding-left: 18%;">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-4.5" style="margin: 0; padding: 0;">
+                                    High Price: <br>
+                                    Low Price: <br>
+                                    Open Price: <br>
+                                    Prev. Close: <br>
+                                    Volume: 
+                                </div>
+                                <div class="col-1" style="margin: 0; padding: 0;">
+                                    {{ putco(latsp[0]?.high.toFixed(2)) }} <br>
+                                    {{ putco(latsp[0]?.low.toFixed(2)) }} <br>
+                                    {{ putco(latsp[0]?.open.toFixed(2)) }} <br>
+                                    {{ putco(latsp[0]?.prevClose.toFixed(2)) }} <br>
+                                    {{ putco(latsp[0]?.volume) }} <br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col" style="padding-left: 20%;">
+                            <div class="row" *ngIf="latsp[0]?.askPrice != null && latsp[0]?.askPrice != 0;">
+                                <div  class="col-4.5" style="margin: 0; padding: 0;">
+                                    Mid Price: <br>
+                                    Ask Price: <br>
+                                    Ask Size: <br>
+                                    Bid Price: <br>
+                                    Bid Size: 
+                                </div>
+                                <div *ngIf="latsp[0]?.mid != null; else dashblock" class="col-1" style="margin: 0; padding: 0;">
+                                    {{ putco(latsp[0]?.mid.toFixed(2)) }} <br>
+                                    {{ putco(latsp[0]?.askPrice.toFixed(2)) }} <br>
+                                    {{ putco(latsp[0]?.askSize.toFixed(2)) }} <br>
+                                    {{ putco(latsp[0]?.bidPrice.toFixed(2)) }} <br>
+                                    {{ putco(latsp[0]?.bidSize.toFixed(2)) }} <br>
+                                </div>
+                                <ng-template #dashblock>
+                                    <div class="col-1" style="margin: 0; padding: 0;">
+                                         - <br>
+                                        {{ putco(latsp[0]?.askPrice.toFixed(2)) }} <br>
+                                        {{ putco(latsp[0]?.askSize.toFixed(2)) }} <br>
+                                        {{ putco(latsp[0]?.bidPrice.toFixed(2)) }} <br>
+                                        {{ putco(latsp[0]?.bidSize.toFixed(2)) }} <br>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                    <h1 style="text-align: center; margin-top: 7%; font-size: 20px;"><b>Company's Description</b></h1>
+                    Start Date: {{ compdesc?.startDate }}<br><br>
+                    <p>{{ compdesc?.description }}</p>
+                </div>
+                <div class="col-sm-6">
+                    <div *ngIf="loaded == true">
+                        <highcharts-chart 
+                            [Highcharts]="Highcharts" 
+                            [constructorType]="'stockChart'" 
+                            [options]="chartOptions"
+                            [(update)]="updateFlag"
+                            style="width: 100%; display: block;"
+                        ></highcharts-chart>
+                    </div>
+                </div>
+            </div>
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="Top News">
+            <div class="container">
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-sm-6 col-md-12 col-lg-6">
+                        <div *ngFor="let article of nw.news | slice: 0:nw.news?.length/2;">
+                        <div class="card nb" (click)="open(content)" style="margin-bottom: 4%; padding: 5% 20px 5% 20px; background-color: #f5f5f5;">
+                            <div class="row" style="margin: 0;">
+                                <div class="col-sm-6 col-lg-4 col-md-4" style="padding: 0; height: 100px;">
+                                    <img src="{{article.urlToImage}}" width="95%" height="98%" style="border-radius: 3px;">
+                                </div>
+                                <div class="col-sm-6 col-lg-8 col-md-8" style="padding: 0;">
+                                    {{article.title}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <ng-template #content let-modal>
+                            <div class="modal-header" style="display: block;">
+                                <button style="outline: none;" type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+                                <h1 style="margin: 0;" class="modal-title"><b>{{article.source.name}}</b></h1>
+                                <span style="color: gray;"><b>{{article.publishedAt}}</b></span>
+                            </div>
+                            <div class="modal-body">
+                                <span style="font-size: 20px;"><b>{{article.title}}</b><br></span>
+                                <span style="font-size: 13px;">{{article.description}}<br></span>
+                                <span style="font-size: small; color: gray;">For more details click <a target="_blank" href="{{article.url}}">here</a></span>
+                                <br><br><br>
+                                <div class="card">
+                                    <div class="card-body">
+                                        Share<br><br>
+                                        <div style="display: flex;">
+                                            <a style="margin-right: 10px;" target="_blank" class="twitter-share-button" href="https://twitter.com/intent/tweet?text={{article.title}}&url={{article.url}}"><i class="fab fa-twitter fa-3x"></i></a>
+                                            <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{article.url}}&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore"><i class="fab fa-facebook-square fa-3x"></i></a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-12 col-lg-6">
+                        <div *ngFor="let article of nw.news | slice: nw.news?.length/2:nw.news?.length">
+                        <div class="card nb" (click)="open(content)" style="margin-bottom: 4%; padding: 5% 20px 5% 20px; background-color: #f5f5f5;">
+                            <div class="row" style="margin: 0;">
+                                <div class="col-sm-6 col-md-4 col-lg-4" style="padding: 0; height: 100px;">
+                                    <img src="{{article.urlToImage}}" width="95%" height="98%" style="border-radius: 3px;">
+                                </div>
+                                <div class="col-sm-6 col-md-8 col-lg-8" style="padding: 0;">
+                                    {{article.title}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <ng-template #content let-modal>
+                            <div class="modal-header" style="display: block;">
+                                <button style="outline: none;" type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+                                <h1 style="margin: 0;" class="modal-title"><b>{{article.source.name}}</b></h1>
+                                <span style="color:gray"><b>{{article.publishedAt}}</b></span>
+                            </div>
+                            <div class="modal-body">
+                                <span style="font-size: 20px;"><b>{{article.title}}</b><br></span>
+                                <span style="font-size: 13px;">{{article.description}}<br></span>
+                                <span style="font-size: small; color: gray;">For more details click <a target="_blank" href="{{article.url}}">here</a></span>
+                                <br><br><br>
+                                <div class="card">
+                                    <div class="card-body">
+                                        Share<br><br>
+                                        <div style="display: flex;">
+                                            <a style="margin-right: 10px;" target="_blank" class="twitter-share-button" href="https://twitter.com/intent/tweet?text={{article.title}}&url={{article.url}}"><i class="fab fa-twitter fa-3x"></i></a>
+                                            <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{article.url}}&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore"><i class="fab fa-facebook-square fa-3x"></i></a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Charts">
+            <ng-template matTabContent>
+                <div *ngIf="loaded2 == true">
+                    <highcharts-chart 
+                        [Highcharts]="Highcharts" 
+                        [constructorType]="'stockChart'" 
+                        [options]="chartOptions_big"
+                        style="width: 100%; display: block; height: 600px;"
+                    ></highcharts-chart>
+                </div>
+            </ng-template>
+        </mat-tab>
+    </mat-tab-group>
+</ng-template>
+</div>
+</div>

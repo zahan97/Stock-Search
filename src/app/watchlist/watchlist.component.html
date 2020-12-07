@@ -1,0 +1,45 @@
+<div class="container">
+    <h1 style="font-size: 37px; padding-top: min(9%, 40px); margin-bottom: 4%; font-weight: 450;">My Watchlist</h1>
+    <div *ngIf="available == false" class="alert alert-warning" role="alert" style="text-align: center;">
+      Currently you dont have any stock in your watchlist.
+    </div>
+    <div *ngIf="available == true">
+      <div *ngIf="spin_it == true" style="margin-left: 47%;">
+        <mat-spinner diameter="50"></mat-spinner>
+      </div>
+    <div *ngIf="spin_it == false">
+    <div *ngFor="let item of tickers; index as i" class="card" (click)="getDetails(item)" style="margin-bottom: 15px; cursor: pointer;" id={{item}} >
+        <div style="position: absolute; z-index: 2; right: 10px; top: 5px;">
+            <button (click)="remove_it(item)" type="button" class="close" aria-label="Close" style="outline: none;">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="card-body" style="display: flex;">
+          <div style="width: 50%;">
+              <h1 style="font-size: 25px; margin: 5px 0 0 0; font-weight: 550;">{{item}}</h1>
+              <h1 style="font-size: 18px; margin: 0; font-weight: 500;">{{compdesc[i]?.name}}</h1>
+          </div>
+          <div *ngIf="(latsp[i][0]?.last - latsp[i][0]?.prevClose)>0; else elseblock" style="width: 50%; text-align: right; color: green;">
+            <h1 style="font-size: 25px; margin: 5px 0 0 0; font-weight: 400;">{{ putco(latsp[i][0]?.last.toFixed(2)) }}</h1>
+            <h1 style="font-size: 18px; margin: 0; font-weight: 400;">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                </svg>
+                {{ (latsp[i][0]?.last - latsp[i][0]?.prevClose).toFixed(2) }} ({{ (((latsp[i][0]?.last - latsp[i][0]?.prevClose)*100)/latsp[i][0]?.prevClose).toFixed(2) }}%)
+            </h1>
+          </div>
+          <ng-template #elseblock>
+            <div style="width: 50%; text-align: right; color: red;">
+              <h1 style="font-size: 25px; margin: 5px 0 0 0; font-weight: 400;">{{ putco(latsp[i][0]?.last) }}</h1>
+              <h1 style="font-size: 18px; margin: 0; font-weight: 400;">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                </svg>
+                  {{ (latsp[i][0]?.last - latsp[i][0]?.prevClose).toFixed(2) }} ({{ (((latsp[i][0]?.last - latsp[i][0]?.prevClose)*100)/latsp[i][0]?.prevClose).toFixed(2) }}%)
+              </h1>
+            </div>
+          </ng-template>
+        </div>
+      </div></div>
+    </div>
+</div>

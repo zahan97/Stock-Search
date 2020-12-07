@@ -1,0 +1,43 @@
+<div class="container">
+    <h1 style="text-align: center;font-size: 65px; padding-top: max(12%, 120px); line-height: 1.4; margin-bottom: 20px;"><b>STOCK SEARCH</b></h1>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-3" style="position: relative; min-width: 280px;">
+            <form [formGroup]="myControl">
+                <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
+                <input
+                    [formControl]="myControl"
+                    [matAutocomplete]="auto" [matAutocompleteConnectedTo]="origin" #tickersym required type="text" class="form-control" 
+                    style="border-radius: 50px; border: solid #6e4ffa; width: 100%;" placeholder="Enter stock name" />
+                </div>
+                
+                <div style="margin-left: 100px;">
+                <mat-autocomplete #auto="matAutocomplete"  [panelWidth]="175">
+                    <mat-option *ngIf="isLoading" class="is-loading"><mat-spinner diameter="40"></mat-spinner></mat-option>
+                    <ng-container *ngIf="!isLoading" >
+                        <mat-option *ngFor="let option of filteredOptions" [value]="option.ticker">
+                            <span>{{option.ticker}}</span> | <span style="font-size: 12px;">{{option.name}}</span>
+                        </mat-option>
+                    </ng-container>
+                </mat-autocomplete>
+                </div>
+                
+                <button type="submit" class="srcicon" (click)="getDetails()">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                        <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                    </svg>
+                </button>
+                
+            </form>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+<!--
+<footer class="footer">
+    <div class="container">
+      <span class="text-muted">Powered by Tiingo. Developed by Zahan Shahana</span>
+    </div>
+</footer>
+-->

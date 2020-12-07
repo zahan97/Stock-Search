@@ -1,0 +1,23 @@
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: #6e4ffa; overflow: hidden; padding-right:min(70px, 6%);">
+  <span class="navbar-brand mb-0 h1"><a (click)="search_clicked()" class="main_link" routerLink="/">Stock Search</a></span>
+  <button style="outline: none;" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" [ngbCollapse]="isCollapsed" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li id="src" style="text-align: right; border: white solid; border-radius: 15px; padding-left: 5%; padding-right: 5%;" class="nav-item"><a id="slink" (click)="search_clicked()" style="color: white;" class="nav-link" routerLink="/">Search</a></li>
+      <li id="watch" style="text-align: right; border:none; border-radius: 15px; padding-left: 5%; padding-right: 5%;" class="nav-item"><a id="wlink" (click)="watch_clicked()" class="nav-link" routerLink="/watchlist">Watchlist</a></li>
+      <li id="port" style="text-align: right; border: none; border-radius: 15px; padding-left: 5%; padding-right: 5%;" class="nav-item"><a id="plink" (click)="port_clicked()" class="nav-link" routerLink="/portfolio">Portfolio</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main role="main">
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <span class="text-muted">Powered by Tiingo. Developed by Zahan Shahana</span>
+  </div>
+</footer>

@@ -1,0 +1,120 @@
+<div class="container">
+    <h1 style="font-size: 37px; padding-top: min(9%, 40px); margin-bottom: 4%; font-weight: 450;">My Portfolio</h1>
+    <div *ngIf="available == false" class="alert alert-warning" role="alert" style="text-align: center;">
+        Currently you dont have any stock.
+    </div> 
+    <div *ngIf="available == true">
+        <div *ngIf="spin_it == true" style="margin-left: 47%;">
+            <mat-spinner diameter="50"></mat-spinner>
+        </div>
+    <div *ngIf="spin_it == false">
+    <div *ngFor="let item of tickers; index as i" class="card" id="{{ item }}" style="margin-bottom: 15px;">
+        <div class="card-header" (click)="getDetails(item)" style="cursor: pointer;">
+            <h1 class="bigh">{{item}}</h1>
+            <h1 class="smallh">{{ compdesc[i]?.name }}</h1>
+        </div>
+        <div class="card-body row" style="display: flex; font-size: 18px;">
+        <div class="col-sm-12 col-md-12 col-lg-6" style="display: flex; font-size: 20px;">
+            <div style="width: 80%;">
+                Quantity:<br>
+                Average Cost / Share:<br>
+                Total Cost:
+            </div>
+            <div style="width: 40%; text-align: right;">
+                {{ putco(quantity[i]) }}<br>
+                {{ putco((numm(costs[i])/numm(quantity[i])).toFixed(2)) }}<br>
+                {{ putco(costs[i]) }}<br>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-6" style="display: flex; font-size: 20px;">
+            <div style="width: 60%;">
+                Change:<br>
+                Current Price:<br>
+                Market Value:<br>
+            </div>
+            
+            <ng-container *ngIf="numm((numm(latsp[i][0]?.last.toFixed(2)) -  numm((numm(costs[i])/numm(quantity[i])).toFixed(2)) ).toFixed(2)) == 0; then blackit; "></ng-container>
+            <ng-container *ngIf="numm((numm(latsp[i][0]?.last.toFixed(2)) -  numm((numm(costs[i])/numm(quantity[i])).toFixed(2)) ).toFixed(2)) > 0; then greenit; "></ng-container>
+            <ng-container *ngIf="numm((numm(latsp[i][0]?.last.toFixed(2)) -  numm((numm(costs[i])/numm(quantity[i])).toFixed(2)) ).toFixed(2)) < 0; then redit; "></ng-container>
+            
+            <ng-template #greenit>
+            <div style="width: 40%; text-align: right; color: green;">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                </svg>
+                {{ putco((numm(latsp[i][0].last.toFixed(2)) -  numm((numm(costs[i])/numm(quantity[i])).toFixed(2)) ).toFixed(2)) }}<br>
+                {{ putco(latsp[i][0]?.last.toFixed(2)) }}<br>
+                {{ putco((latsp[i][0]?.last*numm(quantity[i])).toFixed(2))  }}
+            </div>
+            </ng-template>
+            <ng-template #redit>
+            <div style="width: 40%; text-align: right; color: red;">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                </svg>
+                {{ putco((numm(latsp[i][0]?.last.toFixed(2)) -  numm((numm(costs[i])/numm(quantity[i])).toFixed(2)) ).toFixed(2)) }}<br>
+                {{ putco(latsp[i][0]?.last.toFixed(2)) }}<br>
+                {{ putco((latsp[i][0]?.last*numm(quantity[i])).toFixed(2)) }}
+            </div>
+            </ng-template>
+            <ng-template #blackit>
+            <div style="width: 40%; text-align: right;">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                </svg>
+                {{ putco((numm(latsp[i][0]?.last.toFixed(2)) -  numm((numm(costs[i])/numm(quantity[i])).toFixed(2)) ).toFixed(2)) }}<br>
+                {{ putco(latsp[i][0]?.last.toFixed(2)) }}<br>
+                {{ putco((latsp[i][0]?.last*numm(quantity[i])).toFixed(2)) }}
+            </div>
+            </ng-template>
+        </div>
+        </div>
+        <div class="card-footer" style="text-align: right;">
+            <button type="button" (click)="open(content)" class="btn btn-primary" style="margin-right: 15px;">Buy</button>
+            <button type="button" (click)="open(content2)" class="btn btn-danger" style="margin-right: 5px;">Sell</button>
+        </div>
+        <ng-template #content let-modal>
+            <div class="modal-header" style="display: block;">
+                <button style="outline: none;" type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+                <h1 style="font-size: 15px; font-weight: 400;">{{ item }}</h1>
+            </div>
+            <div class="modal-body" style="padding-bottom: 0;">
+                Current Price: {{ putco(latsp[i][0]?.last.toFixed(2)) }}<br>
+                <div class="form-group row">
+                    <div class="col-lg-1.5">
+                        <label class="col-form-label" style="margin-left: 15px">Quantity</label>
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                        <input #num (keyup)="onKey(num.value, numm(latsp[i][0]?.last.toFixed(2)))" type="number" min="0" class="form-control" value="0">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="mr-auto">Total: {{ values }}</div>
+                <div><button (click)="buyit(item, num.value, numm(latsp[i][0]?.last.toFixed(2)))" type="button" [disabled]="num.value === '0' || num.value === ''" class="btn btn-success">Buy</button></div>
+            </div>
+        </ng-template>
+        <ng-template #content2 let-modal>
+            <div class="modal-header" style="display: block;">
+                <button style="outline: none;" type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+                <h1 style="font-size: 15px; font-weight: 400;">{{ item }}</h1>
+            </div>
+            <div class="modal-body" style="padding-bottom: 0;">
+                Current Price: {{ putco(latsp[i][0].last.toFixed(2)) }}<br>
+                <div class="form-group row">
+                    <div class="col-lg-1.5">
+                        <label class="col-form-label" style="margin-left: 15px">Quantity</label>
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        <input #num (keyup)="onKey(num.value, numm(latsp[i][0]?.last.toFixed(2)))" type="number" min="0" max="{{ quantity[i] }}" class="form-control" value="0">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="mr-auto">Total: {{ values }}</div>
+                <div><button (click)="sellit(item, num.value, numm(latsp[i][0]?.last.toFixed(2)))" type="button" [disabled]="num.value > numm(quantity[i]) || num.value == 0" class="btn btn-success">Sell</button></div>
+            </div>
+        </ng-template>
+    </div></div>
+    </div>
+</div>
