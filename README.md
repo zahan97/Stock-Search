@@ -1,14 +1,13 @@
 # StockSearch
 
+A fully responsive Angular Web App with Node.js RESTful API architecture that allows users to view any company's stock prices along with related news and real-time charts of various prices and meta-data from the Tiingo API.<br>
+Also, there are numerous features like autocomplete, auto-refreshing live data, adding favorite stocks to a watchlist, buy and sell stocks, and sharing news articles on social media.
+
+Chekout the website on http://www.stocksearch.pw/
+
+## Version
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.4.
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Build
 
@@ -17,11 +16,3 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
