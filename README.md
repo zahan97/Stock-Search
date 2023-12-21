@@ -1,6 +1,6 @@
 # StockSearch
 
-A fully responsive Angular Web App with Node.js RESTful API architecture that allows users to view any company's stock prices along with related news and real-time charts of various prices and meta-data from the Tiingo API.<br>
+A fully responsive Web App with Node.js RESTful API architecture that allows users to view any company's stock prices along with related news and real-time charts of various prices and meta-data from the Tiingo API.<br>
 Also, there are numerous features like autocomplete, auto-refreshing live data, adding favorite stocks to a watchlist, buy and sell stocks, and sharing news articles on social media.
 
 Chekout the website on http://www.stocksearch.pw/
@@ -11,10 +11,6 @@ Chekout the website on http://www.stocksearch.pw/
 <img src="images/details2.PNG" width="1000" height="500" />
 <img src="images/news.PNG" width="1000" height="500" />
 <img src="images/portfolio.PNG" width="1000" height="500" />
-
-## Version
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.4.
 
 ## Build
 
